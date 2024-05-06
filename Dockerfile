@@ -1,11 +1,13 @@
+# Use an image that supports Java 21
 FROM alpine:latest as packager
 
-RUN apk --no-cache add openjdk11-jdk openjdk11-jmods
+# Install Java 21 (make sure to check the package name and availability)
+RUN apk --no-cache add openjdk21 openjdk21-jmods
 
 ENV JAVA_MINIMAL="/opt/java-minimal"
 
-# build minimal JRE
-RUN /usr/lib/jvm/java-11-openjdk/bin/jlink \
+# Build minimal JRE with Java 21
+RUN /usr/lib/jvm/java-21-openjdk/bin/jlink \
     --verbose \
     --add-modules \
         java.base,java.sql,java.naming,java.desktop,java.management,java.security.jgss,java.instrument \
@@ -20,13 +22,11 @@ ENV PATH="$PATH:$JAVA_HOME/bin"
 
 COPY --from=packager "$JAVA_HOME" "$JAVA_HOME"
 
-FROM maven:3.6.0-jdk-11-slim AS build
+# Use an image with Maven and Java 21
+FROM maven:3.6.0-jdk-21-slim AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package
 
-
-
-
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/home/app/target/demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/home/app/target/demo-0.0.1-SNAPSHOT.jar"]
