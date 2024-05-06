@@ -14,7 +14,7 @@
 	<name>web</name>
 	<description>Transform</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
