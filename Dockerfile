@@ -13,7 +13,7 @@ RUN mvn -f /home/app/pom.xml clean package
 
 # Final stage
 FROM openjdk:21-slim
-COPY --from=build /home/app/target/demo-0.0.1-SNAPSHOT.jar /home/app/demo.jar
+COPY --from=build /home/app/target/web-0.0.1-SNAPSHOT.jar /home/app/web.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/home/app/demo.jar"]
+ENTRYPOINT ["java", "-jar", "/home/app/web.jar"]
